@@ -16,7 +16,7 @@
                     <button class="btn btn-secondary" onclick="showSection('upload')">Upload DICOM</button>
                     <button class="btn btn-secondary" onclick="showSection('reports')">Reports</button>
                     <button class="btn btn-secondary" onclick="showSection('telehealth')">Telehealth</button>
-                    <button class="btn btn-secondary" onclick="showSection('patients')">Patients</button>
+                    <a href="{% url 'add_patient' %}"><button class="btn btn-secondary">Patients</button></a>
                     <form action="{% url 'logout' %}" method="post">
                         {% csrf_token %}
                         <button class="btn btn-primary" type="submit">Logout</button>
