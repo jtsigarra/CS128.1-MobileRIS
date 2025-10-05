@@ -1,13 +1,10 @@
 from django.urls import path
 from . import views
+from .views import CustomLoginView
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
-    # URL pattern for add patient page
-    # When user goes to /add-patient/, it will call the add_patient view
-    path('add-patient/', views.add_patient, name='add_patient'),
-    
-    # If you have a home URL pattern, add it here too
-    path('', views.home, name='home'),
-    
-    # Add other URL patterns here as you build more features
+    path('', CustomLoginView.as_view(), name='login'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('logout/', LogoutView.as_view(), name='logout'),
 ]
