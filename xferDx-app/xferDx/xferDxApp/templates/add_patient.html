@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Patient - Mobile RIS</title>
-    <!-- Bootstrap CSS for basic styling -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+{% extends 'baseNoStyle.html' %}
+
+{% block title %}Add Patient | RadiologyIS{% endblock %}
+
+{% block content %}
     <div class="container mt-5">
         <h1 class="text-center mb-4">Add Patient</h1>
         
@@ -180,8 +175,4 @@
             </div>
         </form>
     </div>
-    
-    <!-- Bootstrap JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+{% endblock %}
