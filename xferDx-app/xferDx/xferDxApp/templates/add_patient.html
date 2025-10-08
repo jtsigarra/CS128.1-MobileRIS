@@ -1,187 +1,177 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Patient - Mobile RIS</title>
-    <!-- Bootstrap CSS for basic styling -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">Add Patient</h1>
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Add Patient</h1>
+    
+    <!-- Display success or error messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <!-- Patient Form -->
+    <form method="POST" class="needs-validation" novalidate>
+        <!-- CSRF token is required for security in Django forms -->
+        {% csrf_token %}
         
-        <!-- Display success or error messages -->
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div class="card">
+            <div class="card-body">
+                <!-- Basic Information Section -->
+                <h4 class="card-title mb-3">Basic Information</h4>
+                
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name:</label>
+                        {{ form.first_name }}
+                        <!-- Display field errors if any -->
+                        {% if form.first_name.errors %}
+                            <div class="text-danger">{{ form.first_name.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label for="{{ form.middle_name.id_for_label }}" class="form-label">Middle Name:</label>
+                        {{ form.middle_name }}
+                        {% if form.middle_name.errors %}
+                            <div class="text-danger">{{ form.middle_name.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name:</label>
+                        {{ form.last_name }}
+                        {% if form.last_name.errors %}
+                            <div class="text-danger">{{ form.last_name.errors }}</div>
+                        {% endif %}
+                    </div>
                 </div>
-            {% endfor %}
-        {% endif %}
-        
-        <!-- Patient Form -->
-        <form method="POST" class="needs-validation" novalidate>
-            <!-- CSRF token is required for security in Django forms -->
-            {% csrf_token %}
-            
-            <div class="card">
-                <div class="card-body">
-                    <!-- Basic Information Section -->
-                    <h4 class="card-title mb-3">Basic Information</h4>
-                    
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name:</label>
-                            {{ form.first_name }}
-                            <!-- Display field errors if any -->
-                            {% if form.first_name.errors %}
-                                <div class="text-danger">{{ form.first_name.errors }}</div>
-                            {% endif %}
-                        </div>
-                        
-                        <div class="col-md-4">
-                            <label for="{{ form.middle_name.id_for_label }}" class="form-label">Middle Name:</label>
-                            {{ form.middle_name }}
-                            {% if form.middle_name.errors %}
-                                <div class="text-danger">{{ form.middle_name.errors }}</div>
-                            {% endif %}
-                        </div>
-                        
-                        <div class="col-md-4">
-                            <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name:</label>
-                            {{ form.last_name }}
-                            {% if form.last_name.errors %}
-                                <div class="text-danger">{{ form.last_name.errors }}</div>
-                            {% endif %}
-                        </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="{{ form.date_of_birth.id_for_label }}" class="form-label">Date of Birth:</label>
+                        {{ form.date_of_birth }}
+                        {% if form.date_of_birth.errors %}
+                            <div class="text-danger">{{ form.date_of_birth.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Contact Information Section -->
+                <h4 class="card-title mb-3 mt-4">Contact Information</h4>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="{{ form.phone_number.id_for_label }}" class="form-label">Phone Number:</label>
+                        {{ form.phone_number }}
+                        {% if form.phone_number.errors %}
+                            <div class="text-danger">{{ form.phone_number.errors }}</div>
+                        {% endif %}
                     </div>
                     
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="{{ form.date_of_birth.id_for_label }}" class="form-label">Date of Birth:</label>
-                            {{ form.date_of_birth }}
-                            {% if form.date_of_birth.errors %}
-                                <div class="text-danger">{{ form.date_of_birth.errors }}</div>
-                            {% endif %}
-                        </div>
+                    <div class="col-md-6">
+                        <label for="{{ form.email_address.id_for_label }}" class="form-label">Email Address:</label>
+                        {{ form.email_address }}
+                        {% if form.email_address.errors %}
+                            <div class="text-danger">{{ form.email_address.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="{{ form.emergency_contact.id_for_label }}" class="form-label">Emergency Contact:</label>
+                        {{ form.emergency_contact }}
+                        {% if form.emergency_contact.errors %}
+                            <div class="text-danger">{{ form.emergency_contact.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Primary Physician Section -->
+                <h4 class="card-title mb-3 mt-4">Primary Physician</h4>
+                
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label for="{{ form.physician_name.id_for_label }}" class="form-label">Physician Name:</label>
+                        {{ form.physician_name }}
+                        {% if form.physician_name.errors %}
+                            <div class="text-danger">{{ form.physician_name.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="{{ form.physician_email.id_for_label }}" class="form-label">Physician Email Address:</label>
+                        {{ form.physician_email }}
+                        {% if form.physician_email.errors %}
+                            <div class="text-danger">{{ form.physician_email.errors }}</div>
+                        {% endif %}
                     </div>
                     
-                    <!-- Contact Information Section -->
-                    <h4 class="card-title mb-3 mt-4">Contact Information</h4>
-                    
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="{{ form.phone_number.id_for_label }}" class="form-label">Phone Number:</label>
-                            {{ form.phone_number }}
-                            {% if form.phone_number.errors %}
-                                <div class="text-danger">{{ form.phone_number.errors }}</div>
-                            {% endif %}
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label for="{{ form.email_address.id_for_label }}" class="form-label">Email Address:</label>
-                            {{ form.email_address }}
-                            {% if form.email_address.errors %}
-                                <div class="text-danger">{{ form.email_address.errors }}</div>
-                            {% endif %}
-                        </div>
+                    <div class="col-md-6">
+                        <label for="{{ form.physician_phone.id_for_label }}" class="form-label">Physician Phone Number:</label>
+                        {{ form.physician_phone }}
+                        {% if form.physician_phone.errors %}
+                            <div class="text-danger">{{ form.physician_phone.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Procedure Information Section -->
+                <h4 class="card-title mb-3 mt-4">Procedure Information</h4>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="{{ form.procedure_type.id_for_label }}" class="form-label">Procedure Type:</label>
+                        {{ form.procedure_type }}
+                        {% if form.procedure_type.errors %}
+                            <div class="text-danger">{{ form.procedure_type.errors }}</div>
+                        {% endif %}
                     </div>
                     
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="{{ form.emergency_contact.id_for_label }}" class="form-label">Emergency Contact:</label>
-                            {{ form.emergency_contact }}
-                            {% if form.emergency_contact.errors %}
-                                <div class="text-danger">{{ form.emergency_contact.errors }}</div>
-                            {% endif %}
-                        </div>
+                    <div class="col-md-6">
+                        <label for="{{ form.payment_mode.id_for_label }}" class="form-label">Payment Mode:</label>
+                        {{ form.payment_mode }}
+                        {% if form.payment_mode.errors %}
+                            <div class="text-danger">{{ form.payment_mode.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="{{ form.scheduled_date.id_for_label }}" class="form-label">Scheduled Date:</label>
+                        {{ form.scheduled_date }}
+                        {% if form.scheduled_date.errors %}
+                            <div class="text-danger">{{ form.scheduled_date.errors }}</div>
+                        {% endif %}
                     </div>
                     
-                    <!-- Primary Physician Section -->
-                    <h4 class="card-title mb-3 mt-4">Primary Physician</h4>
-                    
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <label for="{{ form.physician_name.id_for_label }}" class="form-label">Physician Name:</label>
-                            {{ form.physician_name }}
-                            {% if form.physician_name.errors %}
-                                <div class="text-danger">{{ form.physician_name.errors }}</div>
-                            {% endif %}
-                        </div>
+                    <div class="col-md-6">
+                        <label for="{{ form.scheduled_time.id_for_label }}" class="form-label">Scheduled Time:</label>
+                        {{ form.scheduled_time }}
+                        {% if form.scheduled_time.errors %}
+                            <div class="text-danger">{{ form.scheduled_time.errors }}</div>
+                        {% endif %}
                     </div>
-                    
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="{{ form.physician_email.id_for_label }}" class="form-label">Physician Email Address:</label>
-                            {{ form.physician_email }}
-                            {% if form.physician_email.errors %}
-                                <div class="text-danger">{{ form.physician_email.errors }}</div>
-                            {% endif %}
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label for="{{ form.physician_phone.id_for_label }}" class="form-label">Physician Phone Number:</label>
-                            {{ form.physician_phone }}
-                            {% if form.physician_phone.errors %}
-                                <div class="text-danger">{{ form.physician_phone.errors }}</div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    
-                    <!-- Procedure Information Section -->
-                    <h4 class="card-title mb-3 mt-4">Procedure Information</h4>
-                    
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="{{ form.procedure_type.id_for_label }}" class="form-label">Procedure Type:</label>
-                            {{ form.procedure_type }}
-                            {% if form.procedure_type.errors %}
-                                <div class="text-danger">{{ form.procedure_type.errors }}</div>
-                            {% endif %}
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label for="{{ form.payment_mode.id_for_label }}" class="form-label">Payment Mode:</label>
-                            {{ form.payment_mode }}
-                            {% if form.payment_mode.errors %}
-                                <div class="text-danger">{{ form.payment_mode.errors }}</div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="{{ form.scheduled_date.id_for_label }}" class="form-label">Scheduled Date:</label>
-                            {{ form.scheduled_date }}
-                            {% if form.scheduled_date.errors %}
-                                <div class="text-danger">{{ form.scheduled_date.errors }}</div>
-                            {% endif %}
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label for="{{ form.scheduled_time.id_for_label }}" class="form-label">Scheduled Time:</label>
-                            {{ form.scheduled_time }}
-                            {% if form.scheduled_time.errors %}
-                                <div class="text-danger">{{ form.scheduled_time.errors }}</div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    
-                    <!-- Form Buttons -->
-                    <div class="row mt-4">
-                        <div class="col-12 text-center">
-                            <a href="{% url 'dashboard' %}"><button type="button" class="btn btn-secondary btn-lg px-5 me-3">Cancel</button></a>
-                            <button type="submit" class="btn btn-primary btn-lg px-5">Add Patient</button>
-                        </div>
+                </div>
+                
+                <!-- Form Buttons -->
+                <div class="row mt-4">
+                    <div class="col-12 text-center">
+                        <a href="{% url 'dashboard' %}"><button type="button" class="btn btn-secondary btn-lg px-5 me-3">Cancel</button></a>
+                        <button type="submit" class="btn btn-primary btn-lg px-5">Add Patient</button>
                     </div>
                 </div>
             </div>
-        </form>
-    </div>
-    
-    <!-- Bootstrap JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+        </div>
+    </form>
+</div>
+{% endblock %}

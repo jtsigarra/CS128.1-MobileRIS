@@ -50,3 +50,50 @@ class Patient(models.Model):
         ordering = ['-created_at']  # Newest patients first
         verbose_name = 'Patient'
         verbose_name_plural = 'Patients'
+import os
+import uuid
+
+def dicom_upload_path(instance, filename):
+    """Generate upload path for DICOM files"""
+    ext = filename.split('.')[-1]
+    unique_filename = f"{uuid.uuid4().hex[:16]}.{ext}"
+    return os.path.join('dicom_files', f'patient_{instance.patient.id}', unique_filename)
+
+class DicomImage(models.Model):
+    patient = models.ForeignKey('Patient', on_delete=models.CASCADE, related_name='dicom_images')
+    file = models.FileField(upload_to=dicom_upload_path)
+    study_id = models.CharField(max_length=100, unique=True, default="")
+    exam_priority = models.CharField(max_length=50, choices=[
+        ('routine', 'Routine'),
+        ('urgent', 'Urgent'),
+        ('stat', 'Stat'),
+    ], default='routine')
+    clinical_history = models.TextField(blank=True)
+    upload_time = models.DateTimeField(auto_now_add=True)
+    metadata_extracted = models.BooleanField(default=False)
+    metadata = models.JSONField(blank=True, null=True)
+    
+    # File information
+    file_size = models.BigIntegerField(blank=True, null=True, help_text="File size in bytes")
+    file_name = models.CharField(max_length=255, blank=True)
+    
+    def save(self, *args, **kwargs):
+        # Generate study ID if not provided
+        if not self.study_id:
+            self.study_id = f"STUDY-{uuid.uuid4().hex[:8].upper()}"
+        
+        # Set file information
+        if self.file:
+            self.file_name = self.file.name
+            try:
+                self.file_size = self.file.size
+            except (ValueError, OSError):
+                self.file_size = 0
+        
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"DICOM Study {self.study_id} for {self.patient.first_name} {self.patient.last_name}"
+    
+    class Meta:
+        ordering = ['-upload_time']
