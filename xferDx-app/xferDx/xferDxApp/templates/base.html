@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>xferdx - Medical Imaging System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --teal: #008080;
+            --teal-light: #00a0a0;
+            --teal-dark: #006666;
+            --green: #28a745;
+            --green-light: #34ce57;
+            --green-dark: #1e7e34;
+        }
+        
+        .bg-teal { background-color: var(--teal) !important; }
+        .bg-green { background-color: var(--green) !important; }
+        .text-teal { color: var(--teal) !important; }
+        .text-green { color: var(--green) !important; }
+        .btn-teal { 
+            background-color: var(--teal); 
+            border-color: var(--teal);
+            color: white;
+        }
+        .btn-teal:hover {
+            background-color: var(--teal-dark);
+            border-color: var(--teal-dark);
+        }
+        .btn-green { 
+            background-color: var(--green); 
+            border-color: var(--green);
+            color: white;
+        }
+        .btn-green:hover {
+            background-color: var(--green-dark);
+            border-color: var(--green-dark);
+        }
+        .btn-outline-teal {
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+        .btn-outline-teal:hover {
+            background-color: var(--teal);
+            color: white;
+        }
+        .stats-card { 
+            border-left: 4px solid var(--teal);
+            transition: transform 0.2s;
+        }
+        .stats-card:hover {
+            transform: translateY(-2px);
+        }
+        .priority-urgent { border-left: 4px solid #dc3545; }
+        .priority-stat { border-left: 4px solid var(--green); }
+        .priority-routine { border-left: 4px solid var(--teal); }
+        .header-logo {
+            height: 40px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body style="background-color:#f8f9fa; color:#333; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    <header style="padding:15px; background-color:var(--teal); color:white; text-align:center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <div style="display:flex; align-items:center; justify-content:center;">
+            <img src="{% static 'images/XferDx logo.png' %}" alt="XferDx Logo" class="header-logo" onerror="this.style.display='none'">
+            <h1 style="margin:0; font-weight:bold;">xferdx</h1>
+        </div>
+        <nav style="margin-top:15px;">
+            <a href="{% url 'dashboard' %}" style="color:var(--green); margin:0 15px; text-decoration:none; font-weight:500;">Dashboard</a>
+            <a href="{% url 'add_patient' %}" style="color:white; margin:0 15px; text-decoration:none; font-weight:500;">Add Patient</a>
+            <a href="{% url 'upload_dicom' %}" style="color:white; margin:0 15px; text-decoration:none; font-weight:500;">Upload DICOM</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" style="color:white; margin:0 15px; text-decoration:none; font-weight:500;">Logout ({{ user.username }})</a>
+            {% else %}
+                <a href="{% url 'login' %}" style="color:white; margin:0 15px; text-decoration:none; font-weight:500;">Login</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main style="padding:20px; max-width:1400px; margin:0 auto;">
+        {% if messages %}
+            {% for message in messages %}
+                <div style="padding:12px; margin:10px 0; border-radius:5px; 
+                           background-color:{% if message.tags == 'success' %}#d4edda{% elif message.tags == 'error' %}#f8d7da{% else %}#fff3cd{% endif %}; 
+                           color:{% if message.tags == 'success' %}#155724{% elif message.tags == 'error' %}#721c24{% else %}#856404{% endif %};
+                           border:1px solid {% if message.tags == 'success' %}#c3e6cb{% elif message.tags == 'error' %}#f5c6cb{% else %}#ffeaa7{% endif %};">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer style="text-align:center; padding:20px; margin-top:40px; background-color:var(--teal); color:white;">
+        <p style="margin:0;">xferdx Medical Imaging System &copy; 2024</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

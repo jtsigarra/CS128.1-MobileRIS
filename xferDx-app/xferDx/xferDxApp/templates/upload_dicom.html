@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div style="max-width:800px; margin:0 auto;">
+    <h2 style="color:var(--teal); text-align:center; margin-bottom:30px;">Upload DICOM Files</h2>
+
+    <div style="background:white; padding:30px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div style="margin-bottom:20px;">
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:var(--teal);">Select Patient:</label>
+                {{ form.patient }}
+                {% if form.patient.errors %}
+                    <div style="color:#dc3545; margin-top:5px;">{{ form.patient.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div style="margin-bottom:20px;">
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:var(--teal);">Exam Priority:</label>
+                {{ form.exam_priority }}
+                {% if form.exam_priority.errors %}
+                    <div style="color:#dc3545; margin-top:5px;">{{ form.exam_priority.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div style="margin-bottom:20px;">
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:var(--teal);">Clinical History:</label>
+                {{ form.clinical_history }}
+                {% if form.clinical_history.errors %}
+                    <div style="color:#dc3545; margin-top:5px;">{{ form.clinical_history.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div style="margin-bottom:25px;">
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:var(--teal);">Select DICOM Files:</label>
+                <input type="file" name="dicom_files" multiple 
+                       style="width:100%; padding:10px; border:2px dashed #ddd; border-radius:5px;"
+                       accept=".dcm,.dicom,.zip,.tar.gz">
+                <small style="color:#666; display:block; margin-top:5px;">
+                    Supported formats: .dcm, .dicom, .zip, .tar.gz
+                </small>
+            </div>
+
+            <div style="text-align:center; margin-top:30px;">
+                <a href="{% url 'dashboard' %}">
+                    <button type="button" style="background-color:#6c757d; color:white; padding:12px 30px; border:none; border-radius:5px; margin-right:15px; cursor:pointer;">
+                        Cancel
+                    </button>
+                </a>
+                <button type="submit" style="background-color:var(--green); color:white; padding:12px 30px; border:none; border-radius:5px; cursor:pointer;">
+                    Upload Files
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

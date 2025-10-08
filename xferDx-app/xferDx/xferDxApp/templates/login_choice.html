@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>XferDx - Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background: linear-gradient(135deg, #008080, #28a745);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        .logo {
+            height: 80px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #008080;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        .login-option {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #008080;
+            border-radius: 8px;
+            background: white;
+            color: #008080;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .login-option:hover {
+            background: #008080;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .radiologist-option {
+            border-color: #28a745;
+            color: #28a745;
+        }
+        .radiologist-option:hover {
+            background: #28a745;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <img src="{% static 'images/XferDx logo.png' %}" alt="XferDx Logo" class="logo" onerror="this.style.display='none'">
+        <h1>XferDx Medical Imaging</h1>
+        <p style="color: #666; margin-bottom: 30px;">Please choose your login method</p>
+        
+        <a href="{% url 'login' %}" class="login-option radiologist-option">
+            Radiologist Login
+        </a>
+        
+        <a href="/admin/" class="login-option">
+            Patient Login
+        </a>
+    </div>
+</body>
+</html>
