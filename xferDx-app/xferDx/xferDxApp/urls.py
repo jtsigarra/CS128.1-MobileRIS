@@ -1,15 +1,13 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
 from .views import CustomLoginView
-from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
-from django.views.generic import TemplateView
 
 urlpatterns = [
     path('', CustomLoginView.as_view(), name='login'),
     path('dashboard/', views.dashboard, name='dashboard'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
+    path('logout/', views.logout_view, name='logout'),
     path('add_patient/', views.add_patient, name='add_patient'),
     path('patient/', views.patient, name='patient'),
     path('telehealth/', views.telehealth, name='telehealth'),

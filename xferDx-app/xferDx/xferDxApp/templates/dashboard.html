@@ -8,7 +8,7 @@
     <div class="hero">
         <h1>Advanced Radiology Information System</h1>
         <p>Complete platform for DICOM management, remote reading, telehealth integration, and patient communication</p>
-        <button class="btn btn-primary">Start Uploading DICOM Files</button>
+        <a href="{% url 'upload_dicom' %}"><button class="btn btn-primary">Start Uploading DICOM Files</button></a>
     </div>
 
     <!-- Dashboard Section -->
@@ -57,45 +57,36 @@
                 </div>
             </div>
 
-            <h3>Recent Studies</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Study ID</th>
-                        <th>Patient</th>
-                        <th>Exam Type</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="studiesTable">
-                    <tr>
-                        <td>STU-001</td>
-                        <td>John Doe</td>
-                        <td>Chest X-Ray</td>
-                        <td>2025-09-24</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td><button class="btn btn-primary" onclick="openDICOMViewer('STU-001')">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>STU-002</td>
-                        <td>Jane Smith</td>
-                        <td>CT Abdomen</td>
-                        <td>2025-09-23</td>
-                        <td><span class="status-badge status-reading">Reading</span></td>
-                        <td><button class="btn btn-primary" onclick="openDICOMViewer('STU-002')">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>STU-003</td>
-                        <td>Mike Johnson</td>
-                        <td>MRI Brain</td>
-                        <td>2025-09-22</td>
-                        <td><span class="status-badge status-completed">Completed</span></td>
-                        <td><button class="btn btn-primary" onclick="viewReport('STU-003')">Report</button></td>
-                    </tr>
-                </tbody>
-            </table>
+            <h3>Recent Patients</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Patient Name</th>
+                            <th>Exam Type</th>
+                            <th>Date of Visit</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studiesTable">
+                        {% for patient in patients %}
+                        <tr>
+                            <td>PT-{{ patient.id|stringformat:"03d" }}</td>
+                            <td>{{ patient.first_name }} {{ patient.last_name }}</td>
+                            <td>{{ patient.get_procedure_type_display }}</td>
+                            <td>{{ patient.scheduled_date|date:"Y-m-d" }}</td>
+                            <td><span class="status-badge status-pending">Scheduled</span></td>
+                            <td><button class="btn btn-primary" onclick="viewPatient('{{ patient.id }}')">View</button></td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" style="text-align:center;">No patients found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
         </div>
 
     <!-- Notification Container -->

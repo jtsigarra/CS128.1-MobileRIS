@@ -4,14 +4,14 @@ from .forms import PatientForm
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from .forms import PatientForm, DicomUploadForm
-from .models import Patient, DicomImage
-import os
+from .models import DicomImage, Patient
 from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from datetime import datetime
 from django.contrib.auth import logout
+import os
 
 class CustomLoginView(LoginView):
     template_name = 'login.html'
@@ -22,11 +22,17 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    patients = Patient.objects.all()
+    return render(request, 'dashboard.html', {
+        'patients': patients,
+    })
 
 @login_required
 def patient(request):
-    return render(request, 'patient.html')
+    patients = Patient.objects.all()
+    return render(request, 'patient.html', {
+        'patients': patients,
+    })
 
 @login_required
 def telehealth(request):
