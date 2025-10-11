@@ -1,57 +1,73 @@
-{% extends 'baseNoStyle.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload DICOM Files</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Upload DICOM Files</h2>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
 
-{% block title %}Add Patient | RadiologyIS{% endblock %}
-
-{% block content %}
-<div style="background:white; padding:30px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
-        <form method="POST" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-
-            <div style="margin-bottom:20px;">
-                <label style="display:block; margin-bottom:8px; font-weight:bold; color:var(--teal);">Select Patient:</label>
+            
+            <div class="mb-3">
+                <label>Select Patient:</label>
                 {{ form.patient }}
-                {% if form.patient.errors %}
-                    <div style="color:#dc3545; margin-top:5px;">{{ form.patient.errors }}</div>
-                {% endif %}
             </div>
 
-            <div style="margin-bottom:20px;">
-                <label style="display:block; margin-bottom:8px; font-weight:bold; color:var(--teal);">Exam Priority:</label>
+            <div class="mb-3">
+                <label>Exam Priority:</label>
                 {{ form.exam_priority }}
-                {% if form.exam_priority.errors %}
-                    <div style="color:#dc3545; margin-top:5px;">{{ form.exam_priority.errors }}</div>
-                {% endif %}
             </div>
 
-            <div style="margin-bottom:20px;">
-                <label style="display:block; margin-bottom:8px; font-weight:bold; color:var(--teal);">Clinical History:</label>
+            <div class="mb-3">
+                <label>Clinical History:</label>
                 {{ form.clinical_history }}
-                {% if form.clinical_history.errors %}
-                    <div style="color:#dc3545; margin-top:5px;">{{ form.clinical_history.errors }}</div>
-                {% endif %}
             </div>
 
-            <div style="margin-bottom:25px;">
-                <label style="display:block; margin-bottom:8px; font-weight:bold; color:var(--teal);">Select DICOM Files:</label>
-                <input type="file" name="dicom_files" multiple 
-                       style="width:100%; padding:10px; border:2px dashed #ddd; border-radius:5px;"
-                       accept=".dcm,.dicom,.zip,.tar.gz">
-                <small style="color:#666; display:block; margin-top:5px;">
-                    Supported formats: .dcm, .dicom, .zip, .tar.gz
-                </small>
+            <div class="mb-3">
+                <label>DICOM Files:</label>
+                {{ form.dicom_files }}
+                <small class="form-text text-muted">Select one or more DICOM files</small>
             </div>
 
-            <div style="text-align:center; margin-top:30px;">
-                <a href="{% url 'dashboard' %}">
-                    <button type="button" style="background-color:#6c757d; color:white; padding:12px 30px; border:none; border-radius:5px; margin-right:15px; cursor:pointer;">
-                        Cancel
-                    </button>
-                </a>
-                <button type="submit" style="background-color:blue; color:white; padding:12px 30px; border:none; border-radius:5px; margin-right:15px; cursor:pointer;">
-                    Upload Files
-                </button>
-            </div>
+            <button type="submit" class="btn btn-primary">Upload DICOM Files</button>
         </form>
+
+        <hr>
+        
+        <h3>Uploaded Files</h3>
+        {% if dicom_images %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Study ID</th>
+                        <th>Patient</th>
+                        <th>File Name</th>
+                        <th>Upload Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dicom in dicom_images %}
+                    <tr>
+                        <td>{{ dicom.study_id }}</td>
+                        <td>{{ dicom.patient.first_name }} {{ dicom.patient.last_name }}</td>
+                        <td>{{ dicom.file_name }}</td>
+                        <td>{{ dicom.upload_time }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No DICOM files uploaded yet.</p>
+        {% endif %}
     </div>
-</div>
-{% endblock %}
+</body>
+</html>
