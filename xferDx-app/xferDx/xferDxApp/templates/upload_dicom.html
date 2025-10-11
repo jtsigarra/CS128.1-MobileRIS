@@ -1,0 +1,70 @@
+{% extends 'baseNoStyle.html' %}
+
+{% block title %}Upload Dicom | RadiologyIS{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2>Upload DICOM Files</h2>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label>Select Patient:</label>
+                {{ form.patient }}
+            </div>
+
+            <div class="mb-3">
+                <label>Exam Priority:</label>
+                {{ form.exam_priority }}
+            </div>
+
+            <div class="mb-3">
+                <label>Clinical History:</label>
+                {{ form.clinical_history }}
+            </div>
+
+            <div class="mb-3">
+                <label>DICOM Files:</label>
+                {{ form.dicom_files }}
+                <small class="form-text text-muted">Select one or more DICOM files</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Upload DICOM Files</button>
+        </form>
+
+        <hr>
+        
+        <h3>Uploaded Files</h3>
+        {% if dicom_images %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Study ID</th>
+                        <th>Patient</th>
+                        <th>File Name</th>
+                        <th>Upload Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dicom in dicom_images %}
+                    <tr>
+                        <td>{{ dicom.study_id }}</td>
+                        <td>{{ dicom.patient.first_name }} {{ dicom.patient.last_name }}</td>
+                        <td>{{ dicom.file_name }}</td>
+                        <td>{{ dicom.upload_time }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No DICOM files uploaded yet.</p>
+        {% endif %}
+    </div>
+{% endblock %}

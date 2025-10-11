@@ -1,0 +1,42 @@
+--- xferDxApp/models.py.orig
++++ xferDxApp/models.py
+@@ -1,5 +1,6 @@
+ from django.db import models
+ import os
+ import uuid
++from django.db.models import Max
+ 
+ # Patient Model - stores all patient information
+ class Patient(models.Model):
+@@ -75,6 +76,15 @@
+ def dicom_upload_path(instance, filename):
+     """Generate upload path for DICOM files"""
+     ext = filename.split('.')[-1]
++    # Use study ID in filename for better organization
++    if instance.study_id:
++        unique_filename = f"{instance.study_id}.{ext}"
++    else:
++        unique_filename = f"{uuid.uuid4().hex[:16]}.{ext}"
++    return os.path.join('dicom_files', f'patient_{instance.patient.id}', unique_filename)
++
++def get_next_study_id():
++    """Generate sequential study ID"""
+     unique_filename = f"{uuid.uuid4().hex[:16]}.{ext}"
+     return os.path.join('dicom_files', f'patient_{instance.patient.id}', unique_filename)
+ 
+@@ -95,8 +105,13 @@
+     file_name = models.CharField(max_length=255, blank=True)
+ 
+     def save(self, *args, **kwargs):
+-        # Generate study ID if not provided
++        # Generate sequential study ID if not provided
+         if not self.study_id:
+-            self.study_id = f"STUDY-{uuid.uuid4().hex[:8].upper()}"
++            # Get the highest study number
++            max_study = DicomImage.objects.aggregate(max_id=Max('id'))
++            if max_study['max_id'] is None:
++                self.study_id = "STUDY-0001"
++            else:
++                self.study_id = f"STUDY-{(max_study['max_id'] + 1):04d}"
+ 
+         # Set file information

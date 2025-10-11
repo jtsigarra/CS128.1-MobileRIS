@@ -1,0 +1,90 @@
+{% extends 'baseNoStyle.html' %}
+
+{% block title %}Patient | RadiologyIS{% endblock %}
+
+{% block content %}
+<!-- Patients Section -->
+<div id="patients" class="section">
+    <h2>👥 Patient Management</h2>
+
+    <div style="margin-bottom: 2rem;">
+        <a href="{% url 'add_patient' %}"><button class="btn btn-primary">Add New Patient</button></a>
+        <button class="btn btn-secondary" onclick="sendAppointmentReminders()">Send Reminders</button>
+    </div>
+
+    <h3>Scheduled Procedures</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Patient Name</th>
+                <th>Exam Type</th>
+                <th>Date of Visit</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="studiesTable">
+            {% for patient in patients %}
+                <tr>
+                    <td>PT-{{ patient.id|stringformat:"03d" }}</td>
+                    <td>{{ patient.first_name }} {{ patient.last_name }}</td>
+                    <td>{{ patient.get_procedure_type_display }}</td>
+                    <td>{{ patient.scheduled_date|date:"Y-m-d" }}</td>
+                    <td><span class="status-badge status-pending">Scheduled</span></td>
+                    <td><button class="btn btn-primary" onclick="viewPatient('{{ patient.id }}')">View</button></td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align:center;">No patients found.</td>
+                </tr>
+            {% endfor %}
+                </tbody>
+
+    </table>
+
+    <div style="margin-top: 2rem;">
+        <h3>Schedule New Procedure</h3>
+
+        <div class="form-group">
+            <label for="schedulePatientId">Patient ID</label>
+            <input type="text" id="schedulePatientId" placeholder="Enter Patient ID">
+        </div>
+
+        <div class="form-group">
+            <label for="schedulePatientEmail">Patient Email</label>
+            <input type="email" id="schedulePatientEmail" placeholder="Enter patient email">
+        </div>
+
+        <div class="form-group">
+            <label for="scheduleProcedure">Procedure Type</label>
+            <select id="scheduleProcedure">
+                <option value="">Select Procedure</option>
+                <option value="xray">X-Ray</option>
+                <option value="ct">CT Scan</option>
+                <option value="mri">MRI</option>
+                <option value="ultrasound">Ultrasound</option>
+                <option value="mammo">Mammography</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="scheduleDate">Date</label>
+            <input type="date" id="scheduleDate">
+        </div>
+
+        <div class="form-group">
+            <label for="scheduleTime">Time</label>
+            <input type="time" id="scheduleTime">
+        </div>
+
+        <div class="form-group">
+            <label for="scheduleNotes">Special Instructions</label>
+            <textarea id="scheduleNotes" rows="2" placeholder="Any special instructions for the patient"></textarea>
+        </div>
+
+        <button class="btn btn-primary" onclick="scheduleAppointment()">Schedule & Notify Patient</button>
+    </div>
+</div>
+
+{% endblock %}
